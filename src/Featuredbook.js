@@ -1,9 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 
-class Featuredbook extends Component {
+const Featuredbook = (props) => {
 
-  
+  console.log(props);
+
+  return (
+    <div>Once, and future Featuredbook page</div>
+  )
+
 }
 
 export default Featuredbook;

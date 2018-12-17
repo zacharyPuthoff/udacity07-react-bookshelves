@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './BooksAPI';
 
 
 class Bookshelves extends Component {
@@ -15,20 +15,16 @@ class Bookshelves extends Component {
 
   render() {
     const { shelves } = this.state;
-    const { bookRepository } = this.props;
+    const { bookRepository, updateBookRepository, toggleSelected } = this.props;
 
     return (
-      <div>
-
-
+ 
       <div>
         <div className="list-books">
           <div className="list-books-title"><h1>My Bookshelves</h1></div>
         <div className="list-books-content">
 
-
           {shelves.map(theShelf => (
-
 
           <div className='bookshelf' key={theShelf}>
             <h2 className="bookshelf-title">{theShelf}</h2>
@@ -42,7 +38,7 @@ class Bookshelves extends Component {
                     
                     <div className="book-shelf-changer">
                       <select id={thisBook.id} value={thisBook.shelf} 
-                      onChange={(event) => console.log('change that shelf') }>
+                      onChange={(event) => updateBookRepository(thisBook.id, event.target.value, 'bookshelves') }>
                         <option value="move" disabled>Move to...</option>
                         <option value="currentlyReading">Currently Reading</option>
                         <option value="wantToRead">Want to Read</option>
@@ -51,16 +47,20 @@ class Bookshelves extends Component {
                       </select>
                     </div>
 
-                    {/*<Link 
+                    <Link 
                       className='book-info-button' 
-                      to={{pathname: `/bookinfo/${thisBook.id}`, state: {previousPage: 'bookshelf'} }}></Link>
+                      to={{pathname: `/featuredbook/${thisBook.id}`, state: {previousPage: 'bookshelves'} }}>
+                    </Link>
+                    
 
                     <input 
                       type='checkbox' 
                       className='bulk-edit-checkbox' 
-                      value={thisBook.checked}
-                      onChange={ event => console.log('check marks the spot') }
-                    />*/}
+                      value={thisBook.selected}
+                      onChange={ event => {
+                        toggleSelected(thisBook.id, event.target.value, 'bookshelves')
+                      } }
+                    />
 
                   </div>
                   <div className='book-title'>{thisBook.title}</div>
@@ -74,16 +74,9 @@ class Bookshelves extends Component {
           ))}
         </div>
         </div>
-
-
-       <div className="open-search">
+        <div className="open-search">
           <Link to={{pathname: '/search'}}><button>Add a Book</button></Link>
         </div>
-
-
-      </div>
-
-
       </div>
     )
   }

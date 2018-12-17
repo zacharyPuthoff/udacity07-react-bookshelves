@@ -11,7 +11,7 @@ class BooksApp extends Component {
   
   state = {
     bookRepository: [{}],
-    searchResults: [{}],
+    searchResults: [],
     featuredBook: {}
   }
 
@@ -25,7 +25,7 @@ class BooksApp extends Component {
       if (!book.imageLinks) { book.imageLinks = {} }
       if (!book.imageLinks.thumbnail) { book.imageLinks.thumbnail = 'http://books.google.com/books/content?id=NLK2AAAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api' };
       if (!book.shelf) { book.shelf = 'none'};
-      if (!book.selected) { book.selected = false };
+      if (!book.selected) { book.selected = 'false' };
       
       return book;
     });
@@ -41,7 +41,7 @@ class BooksApp extends Component {
           return bookRepository.map(book => {
             if (someBook.id === book.id) {someBook.shelf = book.shelf};
             return someBook;
-          })
+          })[0]
         })
         this.setState({searchResults: updatedSearchResults});      
         break;
@@ -51,7 +51,7 @@ class BooksApp extends Component {
           return bookRepository.map(book => {
             if (someBook.id === book.id) {someBook.shelf = book.shelf};
             return someBook;
-          })
+          })[0]
         })
         this.setState({featuredBook: updatedFeaturedBook})
         break;
@@ -60,18 +60,54 @@ class BooksApp extends Component {
     }
   }
 
-  updateBookRepository = async (bookID, shelfID) => {
-    const { bookRepository } = this.state;
+  toggleSelected = (bookID, currentValue, sourcePage) => {
+    const { bookRepository, searchResults } = this.state;
 
-    console.log('[App.js:66] Book Repository:', bookRepository);
+    switch (sourcePage) {
+      case 'bookshelves': {
+        let index = bookRepository.findIndex(book => book.id === bookID);
+        bookRepository[index].selected = (currentValue === 'true') ? ('false') : ('true');
+        this.setState({bookRepository: bookRepository});
+        break;     
+      }
+      case 'searchpage': {
+        let index = searchResults.findIndex(book => book.id === bookID);
+        searchResults[index].selected = (currentValue === 'true') ? ('false') : ('true');
+        this.setState({searchResults: searchResults});
+        break;
+      }
+      case 'featuredbook': {
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }
 
-    let booksToUpdate = bookRepository.filter(book => (book.selected === true)).push({id: bookID, shelf: shelfID});
+  updateBookRepository = async (bookID, shelfID, sourcePage) => {
+    const { bookRepository, searchResults } = this.state;
+    let booksToUpdate;
 
-    console.log('[App.js:70] Books To Update:', booksToUpdate);
-    
-    await booksToUpdate.forEach(book => { BooksAPI.update({ id: book.id }, shelfID) })
-
-    BooksAPI.getAll().then(fetchedBooks => this.fixer(fetchedBooks, 'bookRepository'));
+    switch (sourcePage) {
+      case 'bookshelves': {
+        booksToUpdate = bookRepository.filter(book => (book.selected === 'true')).concat([{id: bookID, shelf: shelfID}]);
+        await booksToUpdate.map(book => BooksAPI.update({ id: book.id }, shelfID) )
+        BooksAPI.getAll().then(fetchedBooks => this.fixer(fetchedBooks, 'bookRepository'));
+        break;
+      }
+      case 'searchpage': {
+        booksToUpdate = searchResults.filter(book => (book.selected === 'true')).concat([{id: bookID, shelf: shelfID}]);
+        await booksToUpdate.map(book => BooksAPI.update({ id: book.id }, shelfID) )
+        BooksAPI.getAll().then(fetchedBooks => {
+          this.fixer(fetchedBooks, 'bookRepository')
+        });
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   }
 
   updateSearchResults = async (userQuery) => {
@@ -79,6 +115,7 @@ class BooksApp extends Component {
 
     let initialResults = await BooksAPI.search(userQuery);
     initialResults = (initialResults.error) ? ([]) : initialResults;
+
     this.fixer(initialResults, 'searchResults');
   }
 
@@ -97,7 +134,8 @@ class BooksApp extends Component {
       updateBookRepository:this.updateBookRepository, 
       updateSearchResults:this.updateSearchResults, 
       updateFeaturedBook:this.updateFeaturedBook,
-      fixer:this.fixer
+      fixer:this.fixer,
+      toggleSelected:this.toggleSelected
     }
 
     return (
