@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
-import { Link, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import Bookshelves from './Bookshelves.js'
 import Searchpage from './Searchpage.js'
 import Featuredbook from './Featuredbook.js'
@@ -9,9 +9,9 @@ import Featuredbook from './Featuredbook.js'
 
 class BooksApp extends Component {
   
-  state ={
-    bookRepository: [],
-    searchResults: [],
+  state = {
+    bookRepository: [{}],
+    searchResults: [{}],
     featuredBook: {}
   }
 
@@ -63,7 +63,11 @@ class BooksApp extends Component {
   updateBookRepository = async (bookID, shelfID) => {
     const { bookRepository } = this.state;
 
+    console.log('[App.js:66] Book Repository:', bookRepository);
+
     let booksToUpdate = bookRepository.filter(book => (book.selected === true)).push({id: bookID, shelf: shelfID});
+
+    console.log('[App.js:70] Books To Update:', booksToUpdate);
     
     await booksToUpdate.forEach(book => { BooksAPI.update({ id: book.id }, shelfID) })
 
@@ -83,20 +87,31 @@ class BooksApp extends Component {
     this.fixer(requestedBook, 'featuredBook')
   }
 
+
   render() {
+
+    const myProps = {
+      bookRepository:this.state.bookRepository,
+      searchResults:this.state.searchResults,
+      featuredBook:this.state.featuredBook, 
+      updateBookRepository:this.updateBookRepository, 
+      updateSearchResults:this.updateSearchResults, 
+      updateFeaturedBook:this.updateFeaturedBook,
+      fixer:this.fixer
+    }
 
     return (
       <div>
         <Route exact path='/' render={(props) => (
-          <Bookshelves {...props} />
+          <Bookshelves {...props} {...myProps}/>
         )}/>
         
         <Route path='/search' render={(props) => (
-          <Searchpage {...props} />
+          <Searchpage {...props}  {...myProps}/>
         )}/>
 
         <Route path='/featuredBook/:bookID' render={(props) => (
-          <Featuredbook {...props} />
+          <Featuredbook {...props}  {...myProps}/>
         )}/>
       
       </div>
