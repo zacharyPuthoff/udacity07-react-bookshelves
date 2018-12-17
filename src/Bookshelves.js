@@ -6,8 +6,8 @@ import * as BooksAPI from './BooksAPI';
 class Bookshelves extends Component {
 
   state = {
-      shelves: ['currentlyReading', 'wantToRead', 'read']
-    }
+    shelves: ['currentlyReading', 'wantToRead', 'read']
+  }
   
   componentWillMount() {
     BooksAPI.getAll().then(fetchedBooks => this.props.fixer(fetchedBooks, 'bookRepository'));

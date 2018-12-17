@@ -12,7 +12,7 @@ class BooksApp extends Component {
   state = {
     bookRepository: [{}],
     searchResults: [],
-    featuredBook: {}
+    featuredBook: {},
   }
 
   fixer = (someBooks, type) => {

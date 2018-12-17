@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
+import Singlebook from './Singlebook.js'
 
 class Searchpage extends Component {
   state ={
@@ -46,6 +47,9 @@ class Searchpage extends Component {
               <ol className='books-grid'>
                 {searchResults.map(thisBook => (
                 <li key={thisBook.id}>
+
+                
+
                 <div className='book'> 
                   <div className='book-top'>
                     <div className="book-cover" style={{width: 128, height: 188, backgroundImage: `url(${thisBook.imageLinks.thumbnail})`}}></div>
@@ -55,7 +59,8 @@ class Searchpage extends Component {
                       <select id={thisBook.id} value={thisBook.shelf} 
                         onChange={(event) => { 
                           updateBookRepository(thisBook.id, event.target.value, 'searchpage');
-                          this.props.history.push({pathname: '/'});
+                          //this.props.history.push({pathname: '/'});
+
                         }}>
                         <option value="move" disabled>Move to...</option>
                         <option value="currentlyReading">Currently Reading</option>
@@ -83,6 +88,9 @@ class Searchpage extends Component {
                   <div className='book-title'>{thisBook.title}</div>
                   <div className='book-authors'>{thisBook.authors}</div>
                 </div>
+
+                <Singlebook thisBook={thisBook}/>
+
                 </li>
                 ))}
               </ol>
