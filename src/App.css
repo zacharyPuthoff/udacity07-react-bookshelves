@@ -92,9 +92,9 @@ body, .app {
 
 .search-books-bar input {
   width: 100%;
-  padding: 15px 10px;
+  padding: 15px 15px;
   font-size: 1.25em;
-  border: none;
+  border: solid #00009B;
   outline: none;
 }
 
@@ -102,14 +102,15 @@ body, .app {
   display: block;
   top: 20px;
   left: 15px;
-  width: 50px;
-  height: 53px;
+  width: 60px;
+  height: 100%;
   background-image: url('./icons/arrow-back.svg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 28px;
   font-size: 0;
-  border: none;
+  border: solid #00009B;
+  background-color: #00009B;
   outline: none;
 }
 
@@ -142,6 +143,10 @@ button:active {
   width: 140px;
 }
 
+.extra-info {
+  width: 600px;
+}
+
 .book-title,
 .book-authors {
   font-size: 0.8em;
@@ -149,6 +154,8 @@ button:active {
 
 .book-title {
   margin-top: 10px;
+  font-weight: bold;
+  color: #404040;
 }
 
 .book-authors {
@@ -162,7 +169,102 @@ button:active {
   align-items: flex-end;
 }
 
+.book-info-button {
+  opacity: 0.75;
+  position: absolute;
+  right: -16px;
+  bottom: 36px;
+  width: 45px;
+  height: 28px;
+  border-radius: 10%;
+  border-color: white;
+  border-style: solid;
+  border-width: 2px;
+  background: #FF2C2C;
+  background-image: url('./icons/book-info.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 46px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.checkbox-container {
+  position: absolute;
+  cursor: pointer;
+  font-size: 22px;
+  left: 4px;
+  bottom: 14px;
+  width: 10px;
+  height: 10px;
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 20px;
+  width: 20px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.checkmark:after {
+  top: 0px;
+  right: 20px;
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: #FF2C2C;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+  color: white;
+}
+
+.checkbox-container .checkmark:after {
+  left: 10px;
+  top: -10px;
+  width: 10px;
+  height: 24px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.go-back-button {
+  position: absolute;
+  left: 10px;
+  bottom: -10px;
+  width: 64px;
+  height: 36px;
+  border-radius: 10%;
+  background: #FF2C2C;
+  background-image: url('./icons/go-back.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 58px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  border-width: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
 .book-shelf-changer {
+  opacity: 0.75;
   position: absolute;
   right: 0;
   bottom: -10px;
@@ -175,45 +277,9 @@ button:active {
   background-position: center;
   background-size: 20px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-}
-
-.book-info-button {
-  position: absolute;
-  right: -11px;
-  bottom: 36px;
-  width: 45px;
-  height: 25px;
-  border-radius: 10%;
-  background: #FF2C2C;
-  background-image: url('./icons/book-info.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 50px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-}
-
-.bulk-edit-checkbox {
-  position: absolute;
-  left: 2px;
-  bottom: 2px;
-  width: 20px;
-  height: 20px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-}
-
-.go-back-button {
-  position: absolute;
-  left: 10px;
-  bottom: -10px;
-  width: 68px;
-  height: 34px;
-  border-radius: 10%;
-  background: #FF2C2C;
-  background-image: url('./icons/go-back.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 60px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  border-width: 2px;
+  border-color: white;
+  border-style: solid;
 }
 
 .book-shelf-changer select {
@@ -222,6 +288,18 @@ button:active {
   opacity: 0;
   cursor: pointer;
 }
+
+.book-shelf-changer option {
+
+
+  border: none;
+}
+
+.book-shelf-changer option:disabled {
+
+  font-weight: bold;
+}
+
 
 /* book cover */
 
