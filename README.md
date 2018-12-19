@@ -1,19 +1,18 @@
 # MyReads Bookshelf App
 
-### Description & Motivation
+### Description & Process
 
-This is project #7 of 8 on Udacity's Front End Nanodegree.
 
 ### Project Requirements
 
-[See the **rubric** for specific criteria.](https://review.udacity.com/#!/rubrics/918/view)
+[See the **rubric** from Udacity](https://review.udacity.com/#!/rubrics/918/view)
 
 ### How to run MyReads locally
 
-- Clone this repository: `git clone https://github.com/mairamartinsk/my-reads.git`
-- Install all project dependencies with `npm install`
-- Start the development server with `npm start`
-- Visit [localhost:3000](localhost:3000) on your browser of choice to see the app
++ Clone this repository: `git clone https://github.com/zacharyPuthoff/reactnd-project-myreads-starter.git`
++ Install all project dependencies with `npm install`
++ Start the development server with `npm start`
++ localhost:3000 should start up on it's own, if not click [here](localhost:3000)
 
 ### BooksAPI Search Terms
 
@@ -24,5 +23,6 @@ The backend API uses a fixed set of cached search results and is limited to a pa
 + [React.js](https://reactjs.org/)
 + [react-router-dom](https://www.npmjs.com/package/react-router-dom)
 
-![Screenshot of MyReads bookshelves](./)
-![Screenshot of MyReads search results](./)
+![Screenshot react bookshelves](./)
+![Screenshot react search results](./)
+![Screenshot react book information](./)
