@@ -46,7 +46,9 @@ class Singlebook extends Component {
 
       </div>
       <div className='book-title'>{thisBook.title}</div>
-      <div className='book-authors'>{thisBook.authors[0]}</div>
+      {thisBook.authors.map(author => {
+        return <div className='book-authors'>{author}</div>
+      })}
     </div>
     )
     }

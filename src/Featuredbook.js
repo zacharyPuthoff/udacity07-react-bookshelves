@@ -6,7 +6,7 @@ import * as BooksAPI from './BooksAPI';
 class Featuredbook extends Component {
 
   state ={
-    theBook: { title: '', authors: '', imageLinks: {thumbnail: ''}, description: 'Coffee', categories: [], industryIdentifiers: [{}], publisher: '', publishedDate: '', pageCount:''}
+    theBook: { title: '', authors: [''], imageLinks: {thumbnail: ''}, description: 'Coffee', categories: [], industryIdentifiers: [{}], publisher: '', publishedDate: '', pageCount:''}
   }
 
   /* an async-await functiont to pull the books id from params, get it's info from the API, fix it, and then set it as state locally */
@@ -52,33 +52,34 @@ class Featuredbook extends Component {
             <div className='bookshelf-books'>
               <ol className='books-grid'>
                 <li>
+                <div className='book'>
+                  <div className='book-top'>
+                    <div className="book-cover" style={{width: 128, height: 188, backgroundImage: `url(${theBook.imageLinks.thumbnail})`}}></div>
 
-      <div className='book'>
-        <div className='book-top'>
-          <div className="book-cover" style={{width: 128, height: 188, backgroundImage: `url(${theBook.imageLinks.thumbnail})`}}></div>
+                    <div className="book-shelf-changer">
+                      <select id={theBook.id} value={theBook.shelf}
+                        onChange={(event) => {
+                          BooksAPI.update({ id: theBook.id }, event.target.value) /* updates the API with the user's new choice of shelf */
+                          let temp = theBook;
+                          temp.shelf = event.target.value;
+                          this.setState({theBook: temp}) /* updates the shelf of theBook locally */
+                        }}>
+                        <option value="move" disabled>Move to...</option>
+                        <option value="currentlyReading">Currently Reading</option>
+                        <option value="wantToRead">Want to Read</option>
+                        <option value="read">Read</option>
+                        <option value="none">None</option>
+                      </select>
+                    </div>
 
-          <div className="book-shelf-changer">
-            <select id={theBook.id} value={theBook.shelf}
-              onChange={(event) => {
-                BooksAPI.update({ id: theBook.id }, event.target.value) /* updates the API with the user's new choice of shelf */
-                let temp = theBook;
-                temp.shelf = event.target.value;
-                this.setState({theBook: temp}) /* updates the shelf of theBook locally */
-              }}>
-              <option value="move" disabled>Move to...</option>
-              <option value="currentlyReading">Currently Reading</option>
-              <option value="wantToRead">Want to Read</option>
-              <option value="read">Read</option>
-              <option value="none">None</option>
-            </select>
-          </div>
-
-        </div>
-        <div className='book-title'>{theBook.title}</div>
-        <div className='book-authors'>{theBook.authors}</div>
-      </div>
-
+                  </div>
+                  <div className='book-title'>{theBook.title}</div>
+                  {theBook.authors.map(author => {
+                    return <div className='book-authors'>{author}</div>
+                  })}
+                </div>
                 </li>
+
                 <li>
                 <div className='extra-info'>
                   <p>{theBook.description}</p>
@@ -87,6 +88,7 @@ class Featuredbook extends Component {
                   <p>Published by {theBook.publisher} in {theBook.publishedDate.slice(0, 4)} ({theBook.pageCount} pages)</p>
                 </div>
                 </li>
+
               </ol>
             </div>
           </div>
