@@ -13,7 +13,7 @@
 + Clone this repository: `git clone https://github.com/zacharyPuthoff/reactnd-project-myreads-starter.git`
 + Install all project dependencies with `npm install`
 + Start the development server with `npm start`
-+ Install the react-router-dom package; see [here](https://www.npmjs.com/package/react-router-dom) for instructions
++ Install the react-router-dom package; see [here](https://github.com/zacharyPuthoff/udacity07-react-bookshelves.git) for instructions
 + localhost:3000 should start up on it's own, if not, once your dev-server is running, just click [here](http://localhost:3000)
 
 ### BooksAPI Search Terms
