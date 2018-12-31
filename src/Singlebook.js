@@ -35,7 +35,7 @@ class Singlebook extends Component {
           <label className='checkbox-container'>
           <input id={`checkbox-${thisBook.id}`}
             type='checkbox'
-            onChange={ event => {
+            onChange={event => {
               toggleSelected(thisBook.id); // calls the App.js fxn that changes the books selected value to true or false when it's clicked
             } }
           />
