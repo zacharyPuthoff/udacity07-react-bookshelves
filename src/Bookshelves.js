@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import * as BooksAPI from './BooksAPI';
 import Singlebook from './Singlebook.js';
 
 
 class Bookshelves extends Component {
-
-  state = {
-    shelves: ['currentlyReading', 'wantToRead', 'read'] // used for creating each individual bookshelf
-  }
 
   formatShelfName = (shelfName) => { // creates an eye-pleasing version of the shelf variabels for the UI
     switch (shelfName) {
@@ -23,12 +18,8 @@ class Bookshelves extends Component {
     }
   }
 
-  componentWillMount() {
-    BooksAPI.getAll().then(fetchedBooks => this.props.fixer(fetchedBooks, 'myBookCollection'));
-  }
-
   render() {
-    const { shelves } = this.state;
+    const shelves = ['currentlyReading', 'wantToRead', 'read'];
     const { myBookCollection } = this.props;
 
     // filters out unused shelves so they do no display
@@ -48,7 +39,7 @@ class Bookshelves extends Component {
                   {myBookCollection.filter(book => (book.shelf === theShelf)).map(thisBook => (
                   <li key={thisBook.id}>
                   {/* the parent page prop is passed in here; this allows my Singlebook component to make updates to the correct state if the shelf is changed, ie myBookCollection for the bookshelves page, and searchResults for the searchresults page */}
-                  <Singlebook {...this.props} key={`${thisBook.id}-${this.state.query}`} thisBook={thisBook} parentPage={'bookshelves'}/>
+                  <Singlebook {...this.props} key={`${thisBook.id}`} thisBook={thisBook} parentPage={'bookshelves'}/>
                   </li>
                   ))}
                 </ol>

@@ -8,7 +8,17 @@ class Searchpage extends Component {
     localQuery: ''
   }
 
-  componentWillMount() {
+  // makes search requests to the BooksAPI, processes any error message, then hands collection off to the fixer() method for processing and local storage via setState()
+  updateSearchResults = async (userQuery) => {
+    if (userQuery.length === 0) {return};
+
+    let initialResults = await BooksAPI.search(userQuery);
+    initialResults = (initialResults.error) ? ([]) : initialResults;
+
+    this.fixer(initialResults, 'searchResults');
+  }
+
+  componentDidMount() {
     const { updateSearchResults } = this.props;
     const { query } = this.props.match.params;
 

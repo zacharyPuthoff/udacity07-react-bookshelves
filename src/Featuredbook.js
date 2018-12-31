@@ -2,25 +2,29 @@ import React, { Component } from 'react';
 import './App.css';
 import { Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
+import Fixer from './Fixer.js'
 
 class Featuredbook extends Component {
 
   state ={
-    theBook: { title: '', authors: [''], imageLinks: {thumbnail: ''}, description: 'Coffee', categories: [], industryIdentifiers: [{}], publisher: '', publishedDate: '', pageCount:''}
+    theBook: { title: '', authors: [''], imageLinks: {thumbnail: ''}, description: '', categories: [], industryIdentifiers: [{}], publisher: '', publishedDate: '', pageCount:''}
   }
 
-  /* an async-await functiont to pull the books id from params, get it's info from the API, fix it, and then set it as state locally */
   async componentDidMount() {
     const { bookID } = this.props.match.params;
-    const myBook = await BooksAPI.get(bookID);
-    this.props.fixer(myBook, 'featuredBook');
-    this.setState({theBook: myBook});
+    try {
+      let book = await BooksAPI.get(bookID);
+      let fixedBook = await Fixer(book, true);
+      this.setState({theBook: fixedBook});
+    } catch (error) { console.log('Something went wrong!'); console.log(error); }
+
   }
 
   render() {
     let goBackTo;
     const { previousPage } = this.props.location.state;
     const { theBook } = this.state;
+    const { updateMyBookCollection } = this.props;
 
     // ensures that the "back" button functions properly
     switch (previousPage) {
@@ -41,7 +45,7 @@ class Featuredbook extends Component {
       <div className="list-books">
         <div className="list-books-title" style={{position: 'relative'}}><h1>Book Information</h1>
 
-          <Link to={{ pathname: `${goBackTo}`, state: {previousPage: {goBackTo}}}}>
+          <Link to={{ pathname: `${goBackTo}` }}>
             <div className='go-back-button' />
           </Link>
 
@@ -59,10 +63,12 @@ class Featuredbook extends Component {
                     <div className="book-shelf-changer">
                       <select id={theBook.id} value={theBook.shelf}
                         onChange={(event) => {
-                          BooksAPI.update({ id: theBook.id }, event.target.value) /* updates the API with the user's new choice of shelf */
-                          let temp = theBook;
-                          temp.shelf = event.target.value;
-                          this.setState({theBook: temp}) /* updates the shelf of theBook locally */
+                          let newShelf = event.target.value;
+                          BooksAPI.update({ id: theBook.id }, newShelf ) /* updates the API with the user's new choice of shelf */
+                          this.setState(previousState => ({ /* updates the shelf of theBook locally */
+                            theBook: Object.assign(previousState.theBook, { shelf: newShelf })
+                          }));
+                          updateMyBookCollection(theBook.id, newShelf);
                         }}>
                         <option value="move" disabled>Move to...</option>
                         <option value="currentlyReading">Currently Reading</option>
@@ -75,7 +81,7 @@ class Featuredbook extends Component {
                   </div>
                   <div className='book-title'>{theBook.title}</div>
                   {theBook.authors.map(author => {
-                    return <div className='book-authors'>{author}</div>
+                    return <div key={author} className='book-authors'>{author}</div>
                   })}
                 </div>
                 </li>
