@@ -6,6 +6,14 @@ const Singlebook = (props) => {
 
   const  { updateMyBookCollection, toggleSelected, thisBook, parentPage, query } = props;
 
+  // makes sure all checkboxes are reset whenever it is called, even if a checked book is not re-rendered (ie, searchpage, edge-cases on bookshelf)
+  const resetCheckBoxes = () => {
+    const checkBoxes = document.querySelectorAll('input:checked');
+    for (let checkBox of checkBoxes) {
+      checkBox.checked = false;
+    }
+  }
+
   return (
     <div className='book'>
       <div className='book-top'>
@@ -17,6 +25,7 @@ const Singlebook = (props) => {
               let newShelf = event.target.value;
               BooksAPI.update(thisBook, newShelf) // updates the remote database
               updateMyBookCollection(thisBook.id, newShelf); // if this book is in myBookCollection, it updates to the new shelf
+              resetCheckBoxes();
             }}>
             <option value="move" disabled>Move to...</option>
             <option value="currentlyReading">Currently Reading</option>
