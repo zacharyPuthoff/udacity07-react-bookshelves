@@ -5,7 +5,13 @@ import Singlebook from './Singlebook.js';
 
 const Bookshelves = (props) => {
 
-  let formatShelfName = (shelfName) => { // creates an eye-pleasing version of the shelf variabels for the UI
+  const shelves = ['currentlyReading', 'wantToRead', 'read'];
+  const { myBookCollection } = props;
+
+  // filters out unused shelves so they do no display
+  const usedShelves = shelves.filter(shelf => myBookCollection.some(book => book.shelf === shelf));
+
+  const formatShelfName = (shelfName) => { // creates an eye-pleasing version of the shelf variabels for the UI
     switch (shelfName) {
       case 'currentlyReading':
         return 'Currently Reading';
@@ -17,12 +23,6 @@ const Bookshelves = (props) => {
         return;
     }
   }
-
-  const shelves = ['currentlyReading', 'wantToRead', 'read'];
-  const { myBookCollection } = props;
-
-  // filters out unused shelves so they do no display
-  const usedShelves = shelves.filter(shelf => myBookCollection.some(book => book.shelf === shelf));
 
   // this section just cycles through each shelf, and matches any books in myBookCollection that have the same shelf value and pass them on to the Singlebook component for display.
   return (
