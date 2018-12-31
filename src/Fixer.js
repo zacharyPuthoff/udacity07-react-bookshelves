@@ -14,7 +14,7 @@ const Fixer = (bookData, singleBook = false) => {
     if (!book.publisher) {book.publisher = 'an unknown publisher'};
     if (!book.publishedDate) {book.publishedDate = 'Unknown'};
     if (!book.pageCount) {book.pageCount = ' ---'};
-    book.selected = 'false';
+    book.selected = false;
     return book;
   });
 

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import * as BooksAPI from './BooksAPI';
 
 class Singlebook extends Component {
 
   render() {
-    const  { updateMyBookCollection, thisBook, parentPage, query } = this.props;
+    const  { updateMyBookCollection, toggleSelected, thisBook, parentPage, query } = this.props;
 
     return (
       <div className='book'>
@@ -14,8 +15,9 @@ class Singlebook extends Component {
           <div className="book-shelf-changer">
             <select id={thisBook.id} value={thisBook.shelf}
               onChange={(event) => {
-                /* selectThisBook(thisBook.id, parentPage);*/ /* marks the book as selected even if the user didn't check it before changing the shelf */
-                updateMyBookCollection(thisBook.id, event.target.value); /* updates myBookCollection with the new book and shelf */
+                let newShelf = event.target.value;
+                BooksAPI.update(thisBook, newShelf) // updates the remote database
+                updateMyBookCollection(thisBook.id, newShelf); // if this book is in myBookCollection, it updates to the new shelf
               }}>
               <option value="move" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
@@ -25,7 +27,7 @@ class Singlebook extends Component {
             </select>
           </div>
 
-          {/* this Link calls up the detailed book info and passes the book-id as a param to the url! also will allow for bookmarking detailed pages and when the user returns, the detailed info should appear */}
+          {/* this Link calls up the detailed book info and passes the book-id as a param to the url; also will allow for bookmarking detailed pages and when the user returns, the detailed info should appear */}
           <Link
             className='book-info-button'
             to={{pathname: `/featuredbook/${thisBook.id}`, state: {previousPage: parentPage, query: query} }}>
@@ -34,7 +36,7 @@ class Singlebook extends Component {
           <input id={`checkbox-${thisBook.id}`}
             type='checkbox'
             onChange={ event => {
-              /* changes the books selected value to true or false it's state when it's clicked */
+              toggleSelected(thisBook.id); // calls the App.js fxn that changes the books selected value to true or false when it's clicked
             } }
           />
           <span className='checkmark'></span>
@@ -47,8 +49,7 @@ class Singlebook extends Component {
       })}
     </div>
     )
-
-    }
+  }
 };
 
 export default Singlebook;

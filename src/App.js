@@ -16,65 +16,28 @@ class BooksApp extends Component {
 
   async componentDidMount() {
     try {
-      let books = await BooksAPI.getAll();
-      let fixedBooks = await Fixer(books, true);
-      this.setState({myBookCollection: fixedBooks});
-    } catch (error) { console.log('Something went wrong!'); console.log(error); }
+      let books = await BooksAPI.getAll(); // awaits here and gets all the books from the db
+      let fixedBooks = await Fixer(books, false); // the books are sent to the Fixer component to have errors and missing values fixed
+      this.setState({myBookCollection: fixedBooks}); // the newly fixed book collection is set to state
+    } catch (error) { console.log('Something went wrong in BooksApp!'); console.log(error); }
   }
 
-  // sets the 'selected' key to 'true' for the book that is passed to it; that key:value pair is initially set to 'false' byt the fixer() method; part of the buld-edit functionality
-  /*selectThisBook = (bookID, sourcePage) => {
-    const { myBookCollection, searchResults } = this.state;
-
-    switch (sourcePage) {
-      case 'bookshelves': {
-        const index = myBookCollection.findIndex(book => book.id === bookID);
-        myBookCollection[index].selected = ('true');
-        this.setState({myBookCollection[index], selected: true});
-        break;
-      }
-      case 'searchpage': {
-        const index = searchResults.findIndex(book => book.id === bookID);
-        searchResults[index].selected = ('true');
-        this.setState({searchResults: searchResults});
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-  }
-
-  // sets the 'selected' key to 'false' for the book that is passed to it; that key:value pair is initially set to 'false' byt the fixer() method; part of the buld-edit functionality
-  unSelectThisBook =  (bookID, sourcePage) => {
-    const { myBookCollection, searchResults } = this.state;
-
-    switch (sourcePage) {
-      case 'bookshelves': {
-        const index = myBookCollection.findIndex(book => book.id === bookID);
-        myBookCollection[index].selected = ('false');
-        this.setState({myBookCollection: myBookCollection});
-        break;
-      }
-      case 'searchpage': {
-        const index = searchResults.findIndex(book => book.id === bookID);
-        searchResults[index].selected = ('false');
-        this.setState({searchResults: searchResults});
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-  }*/
-
-  // collects all books with 'selected: true' and sets their 'shelf' key to the shelf-value it was passed; then hands collection off to the fixer() method for processing and local storage via setState()
+  // this method uses the function option for setState; we pass in the previous-state and use .map() to iterate over all the entries in myBookCollection; when a book.id matches in the bookID, OR when book.selected equals true, the remote databasee is updated; Object.assign uses the eachBook object as it's target and then copies the value of the newShelf to a copy of eachBook, resets that book's "selected" value, and then returns that copy as that single entry for the .map() fxn; once .map() is done, it returns a new array of book objects that we then set as myBookCollecction
   updateMyBookCollection = (bookID, newShelf) => {
     this.setState(previousState => ({
       myBookCollection: previousState.myBookCollection.map(eachBook => {
+        if ( (eachBook.id === bookID) || (eachBook.selected === true) ){
+          return Object.assign(eachBook, { shelf: newShelf, selected: false });
+        } else { return eachBook; }
+      })
+    }));
+  }
+
+  toggleSelected = (bookID) => {
+    this.setState(previousState => ({
+      myBookCollection: previousState.myBookCollection.map(eachBook => {
         if (eachBook.id === bookID) {
-          BooksAPI.update(eachBook, newShelf);
-          return Object.assign(eachBook, { shelf: newShelf });
+          return Object.assign(eachBook, { selected: !eachBook.selected });
         } else { return eachBook; }
       })
     }));
@@ -86,8 +49,7 @@ class BooksApp extends Component {
     const myProps = {
       myBookCollection:this.state.myBookCollection,
       updateMyBookCollection:this.updateMyBookCollection,
-      selectThisBook:this.selectThisBook,
-      unSelectThisBook:this.unSelectThisBook
+      toggleSelected:this.toggleSelected
     }
 
     return (

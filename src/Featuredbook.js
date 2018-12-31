@@ -13,18 +13,19 @@ class Featuredbook extends Component {
   async componentDidMount() {
     const { bookID } = this.props.match.params;
     try {
-      let book = await BooksAPI.get(bookID);
-      let fixedBook = await Fixer(book, true);
-      this.setState({theBook: fixedBook});
-    } catch (error) { console.log('Something went wrong!'); console.log(error); }
+      let book = await BooksAPI.get(bookID); // awaits here and get the single book from the db
+      let fixedBook = await Fixer(book, true); // the books are sent to the Fixer component to have errors and missing values fixed
+      this.setState({theBook: fixedBook}); // the newly fixed book collection is set to state
+    } catch (error) { console.log('Something went wrong in Featuredbook!'); console.log(error); }
 
   }
 
   render() {
-    let goBackTo;
     const { previousPage } = this.props.location.state;
     const { theBook } = this.state;
     const { updateMyBookCollection } = this.props;
+
+    let goBackTo;
 
     // ensures that the "back" button functions properly
     switch (previousPage) {
@@ -64,11 +65,11 @@ class Featuredbook extends Component {
                       <select id={theBook.id} value={theBook.shelf}
                         onChange={(event) => {
                           let newShelf = event.target.value;
-                          BooksAPI.update({ id: theBook.id }, newShelf ) /* updates the API with the user's new choice of shelf */
-                          this.setState(previousState => ({ /* updates the shelf of theBook locally */
+                          this.setState(previousState => ({ // updates the shelf of theBook locally
                             theBook: Object.assign(previousState.theBook, { shelf: newShelf })
                           }));
-                          updateMyBookCollection(theBook.id, newShelf);
+                          BooksAPI.update({ id: theBook.id }, newShelf ); // updates the remote database
+                          updateMyBookCollection(theBook.id, newShelf); // if this book is in myBookCollection, it updates to the new shelf
                         }}>
                         <option value="move" disabled>Move to...</option>
                         <option value="currentlyReading">Currently Reading</option>
