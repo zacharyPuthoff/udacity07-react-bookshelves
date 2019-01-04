@@ -12,12 +12,10 @@ class Featuredbook extends Component {
 
   async componentDidMount() {
     const { bookID } = this.props.match.params;
-    try {
-      let book = await BooksAPI.get(bookID); // awaits here and get the single book from the db
-      let fixedBook = await Fixer(book, true); // the books are sent to the Fixer component to have errors and missing values fixed
-      this.setState({theBook: fixedBook}); // the newly fixed book collection is set to state
-    } catch (error) { console.log('Something went wrong in Featuredbook!'); console.log(error); }
 
+    let book = await BooksAPI.get(bookID); // awaits here and get the single book from the db
+    let fixedBook = await Fixer(book, true); // the books are sent to the Fixer component to have errors and missing values fixed
+    this.setState({theBook: fixedBook}); // the newly fixed book collection is set to state
   }
 
   render() {
@@ -25,22 +23,12 @@ class Featuredbook extends Component {
     const { theBook } = this.state;
     const { updateMyBookCollection } = this.props;
 
-    let goBackTo;
+    let goBackTo = '';
 
     // ensures that the "back" button functions properly
-    switch (previousPage) {
-      case ('searchpage'): {
-        goBackTo = `/search/${this.props.location.state.query}`;
-        break;
-      }
-      case 'bookshelves': {
-        goBackTo = '/';
-        break;
-      }
-      default: {
-        break;
-      }
-    }
+    if (previousPage === 'searchpage') { goBackTo = `/search/${this.props.location.state.query}` };
+    if (previousPage === 'bookshelves') { goBackTo = '/' };
+
 
     return (
       <div className="list-books">
