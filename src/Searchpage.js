@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
 import Singlebook from './Singlebook.js';
-import Fixer from './Fixer.js'
+import Fixer from './Fixer.js';
+import { DebounceInput } from 'react-debounce-input';
 
 class Searchpage extends Component {
   state ={
@@ -13,20 +14,11 @@ class Searchpage extends Component {
   // makes search requests to the BooksAPI, processes any error message, then hands collection off to the fixer() method for processing and local storage via setState()
   getSearchResults = async (userQuery) => {
 
-    if (userQuery.length === 0) {
-      console.log('zippo time')
-      this.setState({ searchResults: [] })
-      return;
-    }; // prevents a '' search which throws an error from the BooksAPI
+    let initialResults = (userQuery.length === 0) ? [] : await BooksAPI.search(userQuery); // prevents BooksAPI searches of '' which returns undefined
 
-
-    let initialResults = await BooksAPI.search(userQuery);
-    initialResults = (initialResults.error) ? [] : initialResults; // if there search yields no results, an error object is returned; this catches it and sets the results to an empty array
-    let fixedResults = await Fixer(initialResults, false);
+    let fixedResults = (initialResults.error) ? [] : await Fixer(initialResults, false); // if there are no results for any given query, an error object is returned by the BooksAPI; in that case, this sets the searchResults to an empty array rather than that error object
 
     this.setState({ searchResults: fixedResults });
-
-    console.log('query:', userQuery, ' results:', this.state.searchResults)
   }
 
   myBookCollectionChecker = () => {
@@ -54,12 +46,7 @@ class Searchpage extends Component {
   }
 
   render() {
-    let { searchResults, localQuery } = this.state;
-    let upToDateSearchResults;
-
-    // there is an edge case where the user could hold down the backspace key and delete the entire search term, BUT not cause a change in the input field beyond his initial keystroke that just deleted one character; this deals with that by checking the legnth of localQuery at the time of rendering to be sure that the searchResults are up to date even in this edge case
-    // if (localQuery.length === 0) { upToDateSearchResults = [] } else { upToDateSearchResults = searchResults }
-    upToDateSearchResults = searchResults
+    let { searchResults } = this.state;
 
     return (
       <div className="search-books">
@@ -68,10 +55,11 @@ class Searchpage extends Component {
             <button className="close-search" onClick={ console.log() }>Close</button>
           </Link>
           <div className="search-books-input-wrapper">
-            <input
+            <DebounceInput
+              debounceTimeout={100} // delays the firing of the onChange event for 100ms, corrects bad searchResults from the user holding down the backspace key, and also limits calls to the API by waiting until there is a pause in the typing
               type="text"
               placeholder='Search by title or author'
-              defaultValue= {this.state.localQuery}
+              value= {this.state.localQuery}
               onChange={event => {
                 /* sets the localQuery to the typed input and searches as the input changes */
                 this.setState({localQuery: event.target.value});
@@ -85,7 +73,7 @@ class Searchpage extends Component {
             <div className='bookshelf'>
               <div className='bookshelf-books'>
                 <ol className='books-grid'>
-                  {upToDateSearchResults.map(thisBook => (
+                  {searchResults.map(thisBook => (
                   <li key={thisBook.id}>
                   <Singlebook {...this.props} key={`${thisBook.id}`} thisBook={thisBook} parentPage={'searchpage'} query={this.state.localQuery}/>
                   </li>
