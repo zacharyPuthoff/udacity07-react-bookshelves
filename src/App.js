@@ -33,7 +33,7 @@ class BooksApp extends Component {
     }));
   }
 
-  toggleSelected = (bookID) => {
+  toggleSelectedValue = (bookID) => {
     this.setState(previousState => ({
       myBookCollection: previousState.myBookCollection.map(eachBook => {
         if (eachBook.id === bookID) {
@@ -49,7 +49,7 @@ class BooksApp extends Component {
     const myProps = {
       myBookCollection:this.state.myBookCollection,
       updateMyBookCollection:this.updateMyBookCollection,
-      toggleSelected:this.toggleSelected
+      toggleSelectedValue:this.toggleSelectedValue
     }
 
     return (

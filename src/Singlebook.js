@@ -4,7 +4,7 @@ import * as BooksAPI from './BooksAPI';
 
 const Singlebook = (props) => {
 
-  const  { updateMyBookCollection, toggleSelected, thisBook, parentPage, query } = props;
+  const  { updateMyBookCollection, toggleSelectedValue, thisBook, parentPage, query } = props;
 
   // makes sure all checkboxes are reset whenever it is called, even if a checked book is not re-rendered (ie, searchpage, edge-cases on bookshelf)
   const resetCheckBoxes = () => {
@@ -44,7 +44,7 @@ const Singlebook = (props) => {
         <input id={`checkbox-${thisBook.id}`}
           type='checkbox'
           onChange={event => {
-            toggleSelected(thisBook.id); // calls the App.js fxn that changes the books selected value to true or false when it's clicked
+            toggleSelectedValue(thisBook.id); // calls the App.js fxn that changes the books selected value to true or false when it's clicked
           } }
         />
         <span className='checkmark'></span>
