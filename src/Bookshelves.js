@@ -38,7 +38,7 @@ const Bookshelves = (props) => {
                 {myBookCollection.filter(book => (book.shelf === theShelf)).map(thisBook => (
                 <li key={thisBook.id}>
                 {/* the parent page prop is passed in here; this allows my Singlebook component to make updates to the correct state if the shelf is changed, ie myBookCollection for the bookshelves page, and searchResults for the searchresults page */}
-                <Singlebook {...props} key={`${thisBook.id}`} thisBook={thisBook} parentPage={'bookshelves'}/>
+                <Singlebook {...props} key={`${thisBook.id}`} thisBook={thisBook} parentPage={'/'} />
                 </li>
                 ))}
               </ol>
@@ -48,7 +48,7 @@ const Bookshelves = (props) => {
         </div>
       </div>
       <div className="open-search">
-        <Link to={{pathname: '/search'}}><button>Add a Book</button></Link>
+        <Link to={{ pathname: '/search' }}><button>Add a Book</button></Link>
       </div>
     </div>
   )

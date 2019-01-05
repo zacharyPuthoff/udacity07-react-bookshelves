@@ -19,24 +19,15 @@ class Featuredbook extends Component {
   }
 
   render() {
-    const { previousPage } = this.props.location.state;
     const { theBook } = this.state;
-    const { updateMyBookCollection } = this.props;
-
-    let goBackTo = '';
-
-    // ensures that the "back" button functions properly
-    if (previousPage === 'bookshelves') { goBackTo = '/' };
-    if (previousPage === 'searchpage') { goBackTo = `/search/${this.props.location.state.query}` };
-
+    const { parentPage, previousQuery } = this.props.location.state;
+    const { updateMyBookCollection, addToBookCollection } = this.props;
 
     return (
       <div className="list-books">
         <div className="list-books-title" style={{position: 'relative'}}><h1>Book Information</h1>
 
-          <Link to={{ pathname: `${goBackTo}` }}>
-            <div className='go-back-button' />
-          </Link>
+          <Link to={{ pathname: parentPage, state: { previousQuery: previousQuery } }}> <div className='go-back-button' /> </Link>
 
         </div>
 
@@ -49,15 +40,16 @@ class Featuredbook extends Component {
                   <div className='book-top'>
                     <div className="book-cover" style={{width: 128, height: 188, backgroundImage: `url(${theBook.imageLinks.thumbnail})`}}></div>
 
+                    {/* changes the shelf a book is on */}
                     <div className="book-shelf-changer">
                       <select id={theBook.id} value={theBook.shelf}
                         onChange={(event) => {
                           let newShelf = event.target.value;
-                          this.setState(previousState => ({ // updates the shelf of theBook locally
+                          this.setState(previousState => ({
                             theBook: Object.assign(previousState.theBook, { shelf: newShelf })
                           }));
-                          BooksAPI.update({ id: theBook.id }, newShelf ); // updates the remote database
-                          updateMyBookCollection(theBook.id, newShelf); // if this book is in myBookCollection, it updates to the new shelf
+                          if (parentPage === '/') updateMyBookCollection(theBook.id, newShelf);
+                          if (parentPage === '/search') addToBookCollection(theBook); // no need tp update searchResults here as they will be checked against myBookCollection
                         }}>
                         <option value="move" disabled>Move to...</option>
                         <option value="currentlyReading">Currently Reading</option>

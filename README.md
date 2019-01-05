@@ -20,8 +20,8 @@ The features of MyReads are pretty straightforward. The main page contains shelv
 1. click on the orange-down-arrow button on any book and choose the new shelf you'd like to move it to
 2. the user may also check the box on any of the other books you see, and when you move any one of the check-marked books, they will all move to the same shelf
 3. the user may even check a few books, and then assign a new shelf to an un-checked book, and both the checked books will move with it
-4. click the blue plus-sign button in the lower right, and a search-page opens
-5. click the info button to be taken to a page that will display detailed information about your book
+4. click the info button to be taken to a page that will display detailed information about your book
+5. click the blue plus-sign button in the lower right, and a search-page opens
 
 #### Search Page
 1. type in your search term, and the matching books will appear (if any of them are already on your shelf, that will be reflected in the shelf-changer button)

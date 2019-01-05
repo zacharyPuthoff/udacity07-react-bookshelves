@@ -13,11 +13,12 @@ class Searchpage extends Component {
 
   componentDidMount() {
     // sets the query to the param that might be passed to it by featuredbook if the user is navigating back; this preserves the searchpage if the user clicks away for more detailed information on a book
-    const { query } = this.props.match.params;
-    if (query !== undefined) {
-      this.setState({localQuery: `${query}`});
-      this.getSearchResults(query);
+    const previousQuery = (this.props.location.state === undefined) ? '' : this.props.location.state.previousQuery
+    if ((previousQuery !== undefined) && (previousQuery !== '')) {
+      this.setState({localQuery: `${previousQuery}`});
+      this.getSearchResults(previousQuery);
     }
+
   }
 
   // makes search requests to the BooksAPI, processes any error message, then hands collection off to the fixer() method for processing and local storage via setState()
@@ -66,11 +67,12 @@ class Searchpage extends Component {
   }
 
   render() {
-    let { searchResults } = this.state;
+    let { searchResults, localQuery } = this.state;
 
     const myProps = {
       updateSearchResults:this.updateSearchResults,
-      toggleSelectedSearchResults:this.toggleSelectedSearchResults
+      toggleSelectedSearchResults:this.toggleSelectedSearchResults,
+      query:this.state.localQuery
     }
 
     return (
@@ -100,7 +102,7 @@ class Searchpage extends Component {
                 <ol className='books-grid'>
                   {searchResults.map(thisBook => (
                   <li key={thisBook.id}>
-                  <Singlebook {...this.props} {...myProps} key={`${thisBook.id}`} thisBook={thisBook} parentPage={'searchpage'} query={this.state.localQuery}/>
+                  <Singlebook {...this.props} {...myProps} key={`${thisBook.id}`} thisBook={thisBook} previousQuery={localQuery} parentPage={'/search'}/>
                   </li>
                   ))}
                 </ol>

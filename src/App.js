@@ -68,11 +68,11 @@ class BooksApp extends Component {
           <Bookshelves {...props} {...myProps}/>
         )}/>
 
-        <Route path='/search/:query?' render={(props) => (
+        <Route path='/search' render={(props) => (
           <Searchpage {...props}  {...myProps}/>
         )}/>
 
-        <Route path='/featuredbook/:bookID' render={(props) => (
+        <Route path='/featuredbook=:bookID' render={(props) => (
           <Featuredbook {...props}  {...myProps}/>
         )}/>
 
