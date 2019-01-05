@@ -11,29 +11,6 @@ class Searchpage extends Component {
     searchResults: []
   }
 
-  // makes search requests to the BooksAPI, processes any error message, then hands collection off to the fixer() method for processing and local storage via setState()
-  getSearchResults = async (userQuery) => {
-
-    let initialResults = (userQuery.length === 0) ? [] : await BooksAPI.search(userQuery); // prevents BooksAPI searches of '' which returns undefined
-
-    let fixedResults = (initialResults.error) ? [] : await Fixer(initialResults, false); // if there are no results for any given query, an error object is returned by the BooksAPI; in that case, this sets the searchResults to an empty array rather than that error object
-
-    this.setState({ searchResults: fixedResults });
-
-    this.myBookCollectionChecker();
-  }
-
-  // checks to see if any book in the searchResults is already in my collection; if so, just copies it from myVBookCollection with it's proper shelf value
-  myBookCollectionChecker = () => {
-    const { myBookCollection } = this.props;
-    this.setState(previousState => ({
-      searchResults: previousState.searchResults.map(searchResultsBook => {
-        let inMyCollection =  myBookCollection.some(book => book.id === searchResultsBook.id);
-        return (inMyCollection) ? myBookCollection.find(book => book.id === searchResultsBook.id) : searchResultsBook;
-      })
-    }));
-  }
-
   componentDidMount() {
     // sets the query to the param that might be passed to it by featuredbook if the user is navigating back; this preserves the searchpage if the user clicks away for more detailed information on a book
     const { query } = this.props.match.params;
@@ -43,8 +20,58 @@ class Searchpage extends Component {
     }
   }
 
+  // makes search requests to the BooksAPI, processes any error message, then hands collection off to the fixer() method for processing and local storage via setState()
+  getSearchResults = async (userQuery) => {
+
+    // prevents BooksAPI searches of '' which returns undefined
+    let initialResults = (userQuery.length === 0) ? [] : await BooksAPI.search(userQuery);
+
+    // if there are no results for any given query, an error object is returned by the BooksAPI; in that case, this sets the searchResults to an empty array rather than that error object
+    let fixedResults = (initialResults.error) ? [] : await Fixer(initialResults, false);
+
+    // checks in myBookCollection to see if any of the searchResults are already in my collection and replaces that book with the book collection version so the correct shelf is set on the searchResults
+    const { myBookCollection } = this.props;
+    let crossCheckedResults = fixedResults.map(searchResultsBook => {
+      let inMyCollection =  myBookCollection.some(book => book.id === searchResultsBook.id);
+      return inMyCollection ? myBookCollection.find(book => book.id === searchResultsBook.id) : searchResultsBook;
+    })
+
+    this.setState({ searchResults: crossCheckedResults });
+  }
+
+  // called whenever there is a shelf change; this fxn updates the remote BooksAPI, add any book whose shelf is changed or who is currently selected to MyBookCollection, and also sets the local state to the appropriate shelf, and de-selects that book
+  updateSearchResults = (bookID, newShelf) => {
+    const { addToBookCollection } = this.props;
+
+    this.setState(previousState => ({
+      searchResults: previousState.searchResults.map(eachBook => {
+        if ( (eachBook.id === bookID) || (eachBook.selected === true) ){
+          BooksAPI.update(eachBook, newShelf);
+          addToBookCollection(eachBook);
+          return Object.assign(eachBook, { shelf: newShelf, selected: false });
+        } else { return eachBook; }
+      })
+    }));
+  }
+
+  // simply toggles the selected value on any book
+  toggleSelectedSearchResults = (bookID) => {
+    this.setState(previousState => ({
+      searchpage: previousState.searchResults.map(eachBook => {
+        if (eachBook.id === bookID) {
+          return Object.assign(eachBook, { selected: !eachBook.selected });
+        } else { return eachBook; }
+      })
+    }));
+  }
+
   render() {
     let { searchResults } = this.state;
+
+    const myProps = {
+      updateSearchResults:this.updateSearchResults,
+      toggleSelectedSearchResults:this.toggleSelectedSearchResults
+    }
 
     return (
       <div className="search-books">
@@ -73,7 +100,7 @@ class Searchpage extends Component {
                 <ol className='books-grid'>
                   {searchResults.map(thisBook => (
                   <li key={thisBook.id}>
-                  <Singlebook {...this.props} key={`${thisBook.id}`} thisBook={thisBook} parentPage={'searchpage'} query={this.state.localQuery}/>
+                  <Singlebook {...this.props} {...myProps} key={`${thisBook.id}`} thisBook={thisBook} parentPage={'searchpage'} query={this.state.localQuery}/>
                   </li>
                   ))}
                 </ol>

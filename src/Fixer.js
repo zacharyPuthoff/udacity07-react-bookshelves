@@ -1,4 +1,5 @@
 const Fixer = (bookData, singleBook = false) => {
+  // takes either an array of books or a single book and makes sure all relevant key:value pairs are present and set properly to avoid rendering errors
 
   if (singleBook) {bookData = Array.of(bookData)}
 

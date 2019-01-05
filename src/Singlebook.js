@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import * as BooksAPI from './BooksAPI';
 
 const Singlebook = (props) => {
 
-  const  { updateMyBookCollection, toggleSelectedValue, thisBook, parentPage, query } = props;
+  const  { updateMyBookCollection, toggleSelectedShelvedBooks, thisBook, parentPage, query, updateSearchResults, toggleSelectedSearchResults } = props;
 
-  // makes sure all checkboxes are reset whenever it is called, even if a checked book is not re-rendered (ie, searchpage, edge-cases on bookshelf)
+  // makes sure all checkboxes are reset visually whenever it is called, even if a checked book is not re-rendered
   const resetCheckBoxes = () => {
     const checkBoxes = document.querySelectorAll('input:checked');
     for (let checkBox of checkBoxes) {
@@ -23,8 +22,8 @@ const Singlebook = (props) => {
           <select id={thisBook.id} value={thisBook.shelf}
             onChange={(event) => {
               let newShelf = event.target.value;
-              BooksAPI.update(thisBook, newShelf) // updates the remote database
-              updateMyBookCollection(thisBook.id, newShelf); // if this book is in myBookCollection, it updates to the new shelf
+              if (parentPage === 'bookshelves') updateMyBookCollection(thisBook.id, newShelf);
+              if (parentPage === 'searchpage') updateSearchResults(thisBook.id, newShelf);
               resetCheckBoxes();
             }}>
             <option value="move" disabled>Move to...</option>
@@ -44,7 +43,8 @@ const Singlebook = (props) => {
         <input id={`checkbox-${thisBook.id}`}
           type='checkbox'
           onChange={event => {
-            toggleSelectedValue(thisBook.id); // calls the App.js fxn that changes the books selected value to true or false when it's clicked
+            if (parentPage === 'bookshelves') toggleSelectedShelvedBooks(thisBook.id);
+            if (parentPage === 'searchpage') toggleSelectedSearchResults(thisBook.id);
           } }
         />
         <span className='checkmark'></span>

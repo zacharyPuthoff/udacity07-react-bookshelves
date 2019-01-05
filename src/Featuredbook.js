@@ -26,8 +26,8 @@ class Featuredbook extends Component {
     let goBackTo = '';
 
     // ensures that the "back" button functions properly
-    if (previousPage === 'searchpage') { goBackTo = `/search/${this.props.location.state.query}` };
     if (previousPage === 'bookshelves') { goBackTo = '/' };
+    if (previousPage === 'searchpage') { goBackTo = `/search/${this.props.location.state.query}` };
 
 
     return (
