@@ -2,3 +2,4 @@ node_modules
 .DS_Store
 react-bookshelves.sublime-project
 react-bookshelves.sublime-workspace
+build
