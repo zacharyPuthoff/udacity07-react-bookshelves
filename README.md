@@ -1,6 +1,6 @@
 # MyReads Bookshelf App
 
-This is a project for the Udacity Front-End Nanodegree. I was given the starter code and gradually added in my components and features. I went through the process of learning the extra bits and working out the udnerstanding that I needed as I went along. In the end, I had an app that was working, but seemed structured poorly and not quite reflecting the possibilities of React or my new understanding of it. But it did [work]().
+This is a project for the Udacity Front-End Nanodegree. I was given the starter code and gradually added in my components and features. I went through the process of learning the extra bits and working out the udnerstanding that I needed as I went along. In the end, I had an app that was working, but seemed structured poorly and not quite reflecting the possibilities of React or my new understanding of it.
 
 I instead decided to erase that code and start again, with my new knowledge as a guide in my planning. The final app turned out great, and the functionality is exactly what I wanted.
 
@@ -47,6 +47,7 @@ You can try out a live hosted version MyReads for yourself [here](). If you woul
 + Install all project dependencies with `npm install`
 + Start the development server with `npm start`
 + localhost:3000 should start up on it's own, if not, once your dev-server is running, just click [here](http://localhost:3000)
++ A live version of this app can be found here: [http://react-bookapp.surge.sh/](http://react-bookapp.surge.sh/)
 
 ### BooksAPI Search Terms
 
