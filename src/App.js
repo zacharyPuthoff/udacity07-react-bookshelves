@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Bookshelves from './Bookshelves.js';
 import Searchpage from './Searchpage.js';
 import Featuredbook from './Featuredbook.js';
-import Fixer from './Fixer.js'
+import Fixer from './Fixer.js';
+import FourOhFourPage from './FourOhFourPage.js';
 
 
 class BooksApp extends Component {
@@ -75,19 +76,13 @@ class BooksApp extends Component {
 
     return (
       <div>
-        {/*straightforward use of react-router to set the routes for the app*/}
-        <Route exact path='/' render={(props) => (
-          <Bookshelves {...props} {...bookshelfProps}/>
-        )}/>
-
-        <Route path='/search' render={(props) => (
-          <Searchpage {...props}  {...searchProps}/>
-        )}/>
-
-        <Route path='/featuredbook=:bookID' render={(props) => (
-          <Featuredbook {...props} {...featuredbookProps}/>
-        )}/>
-
+        {/* switch makes React render the first Route that matches, and if none do, the final Route is a 404 page */}
+        <Switch>
+          <Route exact path='/' render={(props) => ( <Bookshelves {...props} {...bookshelfProps}/> )}/>
+          <Route path='/search' render={(props) => ( <Searchpage {...props}  {...searchProps}/> )}/>
+          <Route path='/featuredbook=:bookID' render={(props) => ( <Featuredbook {...props} {...featuredbookProps}/> )}/>
+          <Route component={FourOhFourPage} />
+        </Switch>
       </div>
     )
   }

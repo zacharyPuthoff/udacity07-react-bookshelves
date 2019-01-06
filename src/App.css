@@ -313,3 +313,23 @@ button:active {
   text-align: center;
   font-size: 0.8em;
 }
+
+
+/* 404 page styling */
+.twilight-zone {
+  display: block;
+  width: 100%;
+  min-height: 600px;
+  background-image: url('./icons/rod-serling.png');
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: 440px;
+  outline: none;
+}
+
+.twilight-zone-text {
+  font-weight: bold;
+  width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
