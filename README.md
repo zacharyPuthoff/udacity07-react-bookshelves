@@ -41,13 +41,13 @@ The features of MyReads are pretty straightforward. The main page contains shelv
 
 ### How to Run MyReads
 
-You can try out a live hosted version MyReads for yourself [here](). If you would like to install it on your own local machine:
+You can try out a live hosted version of the MyReads app for yourself here: [http://react-bookapp.surge.sh/](http://react-bookapp.surge.sh/)
 
+If you would like to install it on your own local machine:
 + Clone this repository: `git clone https://github.com/zacharyPuthoff/reactnd-project-myreads-starter.git`
 + Install all project dependencies with `npm install`
 + Start the development server with `npm start`
 + localhost:3000 should start up on it's own, if not, once your dev-server is running, just click [here](http://localhost:3000)
-+ A live version of this app can be found here: [http://react-bookapp.surge.sh/](http://react-bookapp.surge.sh/)
 
 
 ### BooksAPI Search Terms
