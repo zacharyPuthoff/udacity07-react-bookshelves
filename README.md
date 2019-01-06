@@ -65,7 +65,6 @@ The backend API uses a fixed set of cached search results and is limited to a pa
 
 ![Screenshot react bookshelves](./screenshots/main.png)
 
-
 #### Search results
 
 ![Screenshot react search results](./screenshots/search.png)
@@ -73,3 +72,7 @@ The backend API uses a fixed set of cached search results and is limited to a pa
 #### Book Information
 
 ![Screenshot react book information](./screenshots/book-info.png)
+
+#### Custom 404 Page
+
+![Screenshot react 404 page information](./screenshots/404-page.png)
