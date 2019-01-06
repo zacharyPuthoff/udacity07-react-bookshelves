@@ -47,6 +47,7 @@ You can try out a live hosted version MyReads for yourself [here](). If you woul
 + Install all project dependencies with `npm install`
 + Start the development server with `npm start`
 + localhost:3000 should start up on it's own, if not, once your dev-server is running, just click [here](http://localhost:3000)
++ A live version of this app can be found [here](http://react-book-app.surge.sh/)
 
 ### BooksAPI Search Terms
 
