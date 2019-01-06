@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 const Singlebook = (props) => {
 
   const { updateMyBookCollection, toggleSelectedShelvedBooks, thisBook, updateSearchResults, toggleSelectedSearchResults, parentPage } = props;
+
   // allows us to pass the query from the searchpage to each book, which can then be passed on to featuredbook if needed; if there is no previousQuery prop passed in because the singelbook is being rendered on the bookshelf page, the local variable is set to ''
   const previousQuery = ( props.previousQuery === undefined ) ? '' : props.previousQuery;
 

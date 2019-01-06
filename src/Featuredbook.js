@@ -11,7 +11,7 @@ class Featuredbook extends Component {
   }
 
   async componentDidMount() {
-    const { bookID } = this.props.match.params;
+    const { bookID } = this.props.match.params; // pulled from the url for this featuredbook
 
     let book = await BooksAPI.get(bookID); // awaits here and get the single book from the db
     let fixedBook = await Fixer(book, true); // the books are sent to the Fixer component to have errors and missing values fixed
@@ -26,9 +26,8 @@ class Featuredbook extends Component {
     return (
       <div className="list-books">
         <div className="list-books-title" style={{position: 'relative'}}><h1>Book Information</h1>
-
+          {/* passes the previousQuery back to the search page so it can redo the search the user naviagted from */}
           <Link to={{ pathname: parentPage, state: { previousQuery: previousQuery } }}> <div className='go-back-button' /> </Link>
-
         </div>
 
         <div className="list-books-content">
@@ -75,7 +74,6 @@ class Featuredbook extends Component {
                   <p>Published by {theBook.publisher} in {theBook.publishedDate.slice(0, 4)} ({theBook.pageCount} pages)</p>
                 </div>
                 </li>
-
               </ol>
             </div>
           </div>

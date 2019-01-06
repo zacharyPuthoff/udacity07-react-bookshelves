@@ -47,10 +47,12 @@ class Searchpage extends Component {
     this.setState(previousState => ({
       searchResults: previousState.searchResults.map(eachBook => {
         if ( (eachBook.id === bookID) || (eachBook.selected === true) ){
+          eachBook.shelf = newShelf;
+          eachBook.selected = false;
           BooksAPI.update(eachBook, newShelf);
           addToBookCollection(eachBook);
-          return Object.assign(eachBook, { shelf: newShelf, selected: false });
-        } else { return eachBook; }
+        }
+        return eachBook;
       })
     }));
   }
@@ -59,9 +61,8 @@ class Searchpage extends Component {
   toggleSelectedSearchResults = (bookID) => {
     this.setState(previousState => ({
       searchpage: previousState.searchResults.map(eachBook => {
-        if (eachBook.id === bookID) {
-          return Object.assign(eachBook, { selected: !eachBook.selected });
-        } else { return eachBook; }
+        if (eachBook.id === bookID) { eachBook.selected = !eachBook.selected; }
+        return eachBook;
       })
     }));
   }
@@ -72,15 +73,13 @@ class Searchpage extends Component {
     const myProps = {
       updateSearchResults:this.updateSearchResults,
       toggleSelectedSearchResults:this.toggleSelectedSearchResults,
-      query:this.state.localQuery
+      previousQuery:localQuery
     }
 
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <Link to={{pathname: '/'}}>
-            <button className="close-search" onClick={ console.log() }>Close</button>
-          </Link>
+          <Link to={{pathname: '/'}}> <button className="close-search"/> </Link>
           <div className="search-books-input-wrapper">
             <DebounceInput
               debounceTimeout={200} // delays the firing of the onChange event for 200ms, which corrects bad searchResults displaying when the user holds down the backspace key; also limits calls to the API by waiting until there is a pause in the typing
@@ -102,7 +101,7 @@ class Searchpage extends Component {
                 <ol className='books-grid'>
                   {searchResults.map(thisBook => (
                   <li key={thisBook.id}>
-                  <Singlebook {...this.props} {...myProps} key={`${thisBook.id}`} thisBook={thisBook} previousQuery={localQuery} parentPage={'/search'}/>
+                  <Singlebook {...this.props} {...myProps} key={`${thisBook.id}`} thisBook={thisBook} parentPage={'/search'}/>
                   </li>
                   ))}
                 </ol>
