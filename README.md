@@ -34,6 +34,9 @@ The features of MyReads are pretty straightforward. The main page contains shelv
 2. the user may assign the books to a new shelf using the same procedure as on the main page
 3. clicking the back button in the upper left will return the user to the page she originally navigated from (if that page is the search-page, the search will automatically repopulate as soon as you go back to it, with your search term in the search bar; begin typing or deleting there to search again)
 
+#### Custom 404 Page
+This was added by using react-router's switch tag. It takes the URL and finds the first match to it in Routes. By placing my custom 404 page last, it acts as a catch-all. If a user were to try to type in her own URL in the address bar, the app will default to the this page, provide a fun message, and a "Back" button that takes the user to the main bookshelf page.
+
 
 ### Project Requirements
 
