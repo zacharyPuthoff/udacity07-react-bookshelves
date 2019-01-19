@@ -14,7 +14,7 @@ class Searchpage extends Component {
   componentDidMount() {
     // sets the query to the param that might be passed to it by featuredbook if the user is navigating back; this preserves the searchpage if the user clicks away for more detailed information on a book
     const previousQuery = (this.props.location.state === undefined) ? '' : this.props.location.state.previousQuery
-    if (previousQuery !== '') {
+    if ((previousQuery !== '')  && (previousQuery !== undefined)) {
       this.setState({localQuery: `${previousQuery}`});
       this.getSearchResults(previousQuery);
     }
